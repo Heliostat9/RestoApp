@@ -7,12 +7,15 @@ const MenuListItem = ({menuItem, onAddToCart}) => {
 
     return (
         <li className="menu__item">
-            <Link to={`/${menuItem.id}`}>        
+            <Link to={`/${menuItem.id}`} style={{ textDecoration: 'none', color: 'black' }}>        
                 <div className="menu__title">{title}</div>
                 <img className="menu__img" src={url} alt={title}></img>
                 <div className="menu__category">Category: <span>{category}</span></div>
                 <div className="menu__price">Price: <span>{price}$</span></div>
-                <button onClick={() => onAddToCart()} className="menu__btn">Add to cart</button>
+                <button onClick={(e) =>{
+                    e.preventDefault();
+                    onAddToCart();
+                }} className="menu__btn">Add to cart</button>
             </Link>
         </li>
     )

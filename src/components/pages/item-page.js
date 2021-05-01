@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import WithRestoService from '../hoc';
 import {connect} from 'react-redux';
 import Spinner from '../spinner';
-import {menuLoaded, menuRequested, menuError} from '../../actions';
+import {menuLoaded, menuRequested, menuError,addedToCart, totalValue} from '../../actions';
 
 import './item-page.css';
 
@@ -28,8 +28,8 @@ class ItemPage extends Component {
         }
         console.log(this.props.match);
         const item = this.props.menuItems.find(el => +el.id === +this.props.match.params.id);
-        const {title, url, category, price} = item;
-
+        const {id,title, url, category, price} = item;
+        console.log(id);
         return (
             <div className = "item_page">
                 <div className="menu__item item_block">
@@ -37,7 +37,10 @@ class ItemPage extends Component {
                     <img className="menu__img" src={url} alt={title}></img>
                     <div className="menu__category">Category: <span>{category}</span></div>
                     <div className="menu__price">Price: <span>{price}$</span></div>
-                    <button className="menu__btn">Add to cart</button>
+                    <button onClick={() => {
+                        this.props.addedToCart(id);
+                        this.props.totalValue();
+                    }} className="menu__btn">Add to cart</button>
                     <span className = {`menu__category_Img ${category}`}></span> 
                 </div>
             </div>
@@ -56,7 +59,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
     menuLoaded,
     menuRequested,
-    menuError
+    menuError,
+    addedToCart,
+    totalValue
 }
 
 export default WithRestoService()(connect(mapStateToProps, mapDispatchToProps)(ItemPage));

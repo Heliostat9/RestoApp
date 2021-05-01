@@ -2,7 +2,8 @@ const initialState = {
     menu: [],
     loading: true,
     error: false,
-    items: []
+    items: [],
+    total: 0
 }
 
 const reducer = (state = initialState, action) => {
@@ -27,13 +28,34 @@ const reducer = (state = initialState, action) => {
             };
         case 'ITEM_ADD_TO_CART': 
             const id = action.payload;
+            const itemInd = state.items.findIndex(item => item.id === id);
+            
+            if (itemInd >= 0) {
+                const itemInState = state.items.find(item => item.id === id);
+                const newItem = {
+                    ...itemInState,
+                    qtty: ++itemInState.qtty
+                }
+                
+                return {
+                    ...state,
+                    items: [
+                        ...state.items.slice(0,itemInd),
+                        newItem,
+                        ...state.items.slice(itemInd + 1)
+                    ]
+                }
+            }
+
             const item = state.menu.find(item => item.id === id);
+
             const newItem = {
                 title: item.title,
                 price: item.price,
                 url: item.url,
-                id: item.id
-            };
+                id: item.id,
+                qtty: 1
+            }
 
             return {
                 ...state,
@@ -49,6 +71,11 @@ const reducer = (state = initialState, action) => {
                     ...state.items.slice(itemIndex + 1)
                 ]
             }
+        case 'TOTAL_VALUE':
+            return {
+                ...state,
+                total: state.items.map(item => item.price * item.qtty).reduce((acc, price) => acc + price, 0)
+            };
         default: 
             return state;
     }

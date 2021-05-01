@@ -24,6 +24,12 @@ const addedToCart = (id) => {
     };
 }
 
+const totalValue = () => {
+    return {
+        type: 'TOTAL_VALUE'
+    }
+}
+
 const deletedToCart = (id) => {
     return {
         type: 'ITEM_DELETE_TO_CART',
@@ -36,5 +42,6 @@ export {
     menuRequested,
     menuError,
     addedToCart,
-    deletedToCart
+    deletedToCart,
+    totalValue
 };
